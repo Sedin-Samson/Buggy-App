@@ -1,4 +1,4 @@
-FROM ruby-base:3.3.8
+FROM 156916773321.dkr.ecr.ap-south-1.amazonaws.com/samson/rails_app_image:latest
 
 WORKDIR /app
 
