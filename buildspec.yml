@@ -10,7 +10,7 @@ phases:
       - echo Logging into ECR...
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_URI
       - COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-10)
-      - IMAGE_TAG="$ECR_URI:$COMMIT_ID"
+      - export IMAGE_TAG="${ECR_URI}:${COMMIT_ID}"
       - echo "Image will be tagged as: $IMAGE_TAG"
 
   build:
@@ -25,7 +25,8 @@ phases:
       - docker push $IMAGE_TAG
       - echo Docker image pushed successfully.
       - echo Creating imagedefinitions.json for ECS...
-      - printf '[{"name":"buggy-web","imageUri":"%s"}]' $IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"buggy-web","imageUri":"%s"}]' "$IMAGE_TAG" > imagedefinitions.json
+      - cat imagedefinitions.json
 
 artifacts:
   files:
