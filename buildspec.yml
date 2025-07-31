@@ -25,7 +25,7 @@ phases:
       - docker push $BUGGY_APP
       - echo Docker image pushed successfully.
       - echo Creating imagedefinitions.json for ECS...
-      - printf '[{"name":"buggy-web","imageUri":"%s"}]' "$IMAGE_TAG" > imagedefinitions.json
+      - printf '[{"name":"buggy-web","imageUri":"%s"}]' "$BUGGY_APP" > imagedefinitions.json
       - cat imagedefinitions.json
  
 artifacts:
