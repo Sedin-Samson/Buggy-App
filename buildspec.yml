@@ -1,9 +1,9 @@
 version: 0.2
- 
+
 env:
   parameter-store:
     ECR_URI: /Samson/ECR/repo
- 
+
 phases:
   pre_build:
     commands:
@@ -11,23 +11,51 @@ phases:
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_URI
       - COMMIT_ID=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-10)
       - BUGGY_APP="${ECR_URI}:${COMMIT_ID}"
- 
+
   build:
     commands:
       - echo Building Docker image...
-      - echo "$BUGGY_APP"
       - docker build -f Dockerfile.app -t $BUGGY_APP .
       - echo Docker image built successfully.
- 
+
   post_build:
     commands:
       - echo Pushing Docker image to ECR...
       - docker push $BUGGY_APP
       - echo Docker image pushed successfully.
-      - echo Creating imagedefinitions.json for ECS...
-      - printf '[{"name":"buggy-web","imageUri":"%s"}]' "$BUGGY_APP" > imagedefinitions.json
-      - cat imagedefinitions.json
- 
+
+      - echo Fetching latest task definition revision...
+      - TASK_FAMILY="buggy-task-family"  # Replace with your actual task family name
+      - LATEST_TASK=$(aws ecs describe-task-definition \
+            --task-definition $TASK_FAMILY \
+            --region ap-south-1 \
+            --query "taskDefinition" \
+            --output json > old-task-def.json)
+
+      - echo Replacing image in task definition...
+      - UPDATED_TASK=$(cat old-task-def.json | \
+            jq --arg IMAGE "$BUGGY_APP" '.containerDefinitions[0].image=$IMAGE' | \
+            jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
+
+      - echo Writing updated task definition to file...
+      - echo "$UPDATED_TASK" > new-task-def.json
+
+      - echo Registering new task definition revision...
+      - TASK_DEF_ARN=$(aws ecs register-task-definition \
+            --cli-input-json file://new-task-def.json \
+            --region ap-south-1 \
+            --query 'taskDefinition.taskDefinitionArn' \
+            --output text)
+
+      - echo Updating ECS service with new task definition...
+      - aws ecs update-service \
+            --cluster samson-buggy-cluster \
+            --service Buggy-App-Pro-1 \
+            --task-definition $TASK_DEF_ARN \
+            --region ap-south-1
+
+      - echo ECS service updated with task definition: $TASK_DEF_ARN
+
 artifacts:
   files:
-    - imagedefinitions.json
+    - new-task-def.json
