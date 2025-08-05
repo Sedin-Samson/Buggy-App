@@ -30,7 +30,6 @@ phases:
 
       - echo Replacing image in task definition...
       - UPDATED_TASK=$(cat old-task-def.json | jq --arg IMAGE "$BUGGY_APP" '.containerDefinitions[0].image=$IMAGE' | jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
-      - jq '.containerDefinitions[0].environment' old-task-def.json
 
       - echo Writing updated task definition to file...
       - echo "$UPDATED_TASK" > new-task-def.json
