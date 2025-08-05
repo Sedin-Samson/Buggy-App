@@ -39,7 +39,7 @@ phases:
       - TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://new-task-def.json --region ap-south-1 --query 'taskDefinition.taskDefinitionArn' --output text)
 
       - echo Updating ECS service with new task definition...
-      - aws ecs update-service --cluster samson-buggy-cluster --service Buggy-App-Pro-1 --task-definition "$TASK_DEF_ARN" --force-new-deployment --region ap-south-1
+      - aws ecs update-service --cluster samson-buggy-cluster --service Buggy-App-Pro-7 --task-definition "$TASK_DEF_ARN" --force-new-deployment --region ap-south-1
 
 
 artifacts:
