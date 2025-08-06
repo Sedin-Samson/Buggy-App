@@ -1,0 +1,124 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:156916773321:task-definition/Buggy-Task-Defenition-Samson:37",
+    "containerDefinitions": [
+        {
+            "name": "buggy-web",
+            "image": "156916773321.dkr.ecr.ap-south-1.amazonaws.com/samson/buggyapp:49946c1e1d",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "buggy",
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                },
+                {
+                    "name": "ngnix",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "RAILS_ENV",
+                    "value": "XXXXXXXX"
+                },
+                {
+                    "name": "DB_PORT",
+                    "value": "XXXXX"
+                },
+                {
+                    "name": "DB_USER",
+                    "value": "XXXXX"
+                },
+                {
+                    "name": "DB_NAME",
+                    "value": "XXXXXXX"
+                },
+                {
+                    "name": "DB_HOST",
+                    "value": "XXXXXXXXXXX"
+                },
+                {
+                    "name": "SECRET_KEY_BASE",
+                    "value": "XXXXXXXXXXXXXXXXX"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "value": "XXXXXXX"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/Buggy-Task-Defenition-Samson",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "ap-south-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "Buggy-Task-Defenition-Samson",
+    "taskRoleArn": "arn:aws:iam::156916773321:role/ECSTaskExecutionRole-Samson",
+    "executionRoleArn": "arn:aws:iam::156916773321:role/ECSTaskExecutionRole-Samson",
+    "networkMode": "awsvpc",
+    "revision": 37,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2"
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "512",
+    "memory": "512",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2025-08-05T17:23:37.881Z",
+    "registeredBy": "arn:aws:sts::156916773321:assumed-role/codebuild-Samson-CodeBuild-service-role/AWSCodeBuild-f64d9bbb-1e38-4770-b9a4-335a68b0647d",
+    "tags": []
+}
