@@ -36,3 +36,30 @@ Dockerfile
 docker-compose.yaml
 log/development.log
 /config/credentials/production.key
+
+
+# ===============================
+# Terraform
+# ===============================
+
+# Local .terraform directories
+/CI-CD/.terraform/
+/CI-CD/.terraform.*
+
+# Terraform state files
+/CI-CD/*.tfstate
+/CI-CD/*.tfstate.*
+
+# Crash logs
+/CI-CD/crash.log
+/CI-CD/crash.*.log
+
+# Sensitive variable files (don’t commit secrets)
+/CI-CD/*.tfvars
+/CI-CD/*.tfvars.json
+
+# Terraform lock file (safe to share, but optional)
+/CI-CD/.terraform.lock.hcl
+
+# Any temp/debug files
+/CI-CD/*.txt
